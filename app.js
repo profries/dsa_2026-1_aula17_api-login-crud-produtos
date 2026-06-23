@@ -2,6 +2,7 @@ const express = require('express')
 const produtoRouter = require("./router/produto_router")
 const usuarioRouter = require('./router/usuario_router')
 const loggerMiddleware = require("./middleware/logger_middleware")
+const loginController = require('./controller/login_controller')
 const app = express()
 const port = 3000
 
@@ -12,6 +13,8 @@ app.use(loggerMiddleware.realizaLog);
 app.get('/',(req, res) => {
   res.send('Hello World!')
 })
+
+app.post('/api/login', loginController.realizarLogin );
 
 app.use('/api/usuarios', usuarioRouter);
 

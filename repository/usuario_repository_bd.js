@@ -28,8 +28,18 @@ async function inserir(usuario) {
 
 async function buscarPorId(id) {
     const cliente = await bd.connect();
-    const sql = "SELECT * FROM produtos WHERE id=$1";
+    const sql = "SELECT * FROM usuarios WHERE id=$1";
     const result = await cliente.query(sql, [id]);
+    const usuarioEncontrado = result.rows[0];
+    cliente.release();
+
+    return (usuarioEncontrado);
+}
+
+async function buscarPorEmail(email) {
+    const cliente = await bd.connect();
+    const sql = "SELECT * FROM usuarios WHERE email=$1";
+    const result = await cliente.query(sql, [email]);
     const usuarioEncontrado = result.rows[0];
     cliente.release();
 
@@ -41,5 +51,6 @@ module.exports = {
     listar,
     inserir,
     buscarPorId,
+    buscarPorEmail
 }
 

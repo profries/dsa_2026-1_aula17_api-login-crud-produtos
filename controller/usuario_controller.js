@@ -1,7 +1,19 @@
 const usuarioService = require("../service/usuario_service")
 
 async function listar(req, res) {
-    res.json(await usuarioService.listar());
+    const email = (req.query && req.query.email)
+        ? req.query.email
+        : undefined;
+    if(!email) {
+        res.json(await usuarioService.listar());
+    }
+    else {
+        try {
+         res.json(await usuarioService.buscarPorEmail(email));
+        } catch(err) {
+            res.status(err.id).json(err);
+        }
+    }
 }
 
 async function inserir (req, res) {
@@ -24,7 +36,6 @@ async function buscarPorId(req, res) {
         res.status(err.id).json(err);
     }
 }
-
 
 module.exports = {
     listar,

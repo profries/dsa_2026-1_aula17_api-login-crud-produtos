@@ -23,8 +23,34 @@ async function buscarPorId(id) {
     }
 }
 
+async function buscarPorEmail(email) {
+    let usuario = await usuarioRepository.buscarPorEmail(email);
+    if(usuario) {
+        return usuario;
+    }
+    else {
+        throw { id: 404, msg: "Usuario não encontrado!" }
+    }
+}
+
+async function verificarLogin(usuario) {
+    if(!usuario || !usuario.email || !usuario.senha) {
+        throw { id: 401, msg: "Email ou senha inexistentes!"}        
+    }
+
+    let usuarioCadastrado = await usuarioRepository.buscarPorEmail(usuario.email);
+    if(usuarioCadastrado) {
+        if(usuario.senha === usuarioCadastrado.senha) {
+            return { mensagem: "Login realizado com sucesso!"};
+        }
+    }
+    throw { id: 401, msg: "Email ou senha invalidos!"} 
+}
+
 module.exports = {
     listar,
     inserir,
     buscarPorId,
+    buscarPorEmail,
+    verificarLogin
 }
