@@ -6,6 +6,5 @@ const usuarioController = require('../controller/usuario_controller')
 //endpoint: /usuarios
 router.get('/', usuarioController.listar)
 router.post('/', usuarioController.inserir)
-router.get('/:id', usuarioController.buscarPorId)
 
 module.exports = router;
