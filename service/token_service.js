@@ -7,6 +7,17 @@ function criarToken(payload) {
     return token;
 }
 
+function validarToken(token) {
+    try{
+        let data = jwt.verify(token, SECRET);
+        return data;
+    } catch(err) {
+        throw err;
+    }
+    
+}
+
 module.exports = {
-    criarToken
+    criarToken,
+    validarToken
 }

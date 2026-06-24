@@ -3,6 +3,7 @@ const produtoRouter = require("./router/produto_router")
 const usuarioRouter = require('./router/usuario_router')
 const loggerMiddleware = require("./middleware/logger_middleware")
 const loginController = require('./controller/login_controller')
+const authMiddleware = require("./middleware/auth_middleware")
 const app = express()
 const port = 3000
 
@@ -18,6 +19,7 @@ app.post('/api/login', loginController.realizarLogin );
 
 app.use('/api/usuarios', usuarioRouter);
 
+app.use(authMiddleware.verificarAcesso);
 app.use("/api/produtos", produtoRouter);
 
 app.listen(port, () => {
