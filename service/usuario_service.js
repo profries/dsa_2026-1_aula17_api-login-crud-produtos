@@ -1,4 +1,5 @@
 const usuarioRepository = require('../repository/usuario_repository_bd')
+const tokenService = require('./token_service')
 
 async function listar() {
     return await usuarioRepository.listar();
@@ -41,7 +42,11 @@ async function verificarLogin(usuario) {
     let usuarioCadastrado = await usuarioRepository.buscarPorEmail(usuario.email);
     if(usuarioCadastrado) {
         if(usuario.senha === usuarioCadastrado.senha) {
-            return { mensagem: "Login realizado com sucesso!"};
+            const token = tokenService.criarToken({
+                id: usuarioCadastrado.id,
+                email: usuarioCadastrado.email
+            });
+            return {token: token};
         }
     }
     throw { id: 401, msg: "Email ou senha invalidos!"} 
