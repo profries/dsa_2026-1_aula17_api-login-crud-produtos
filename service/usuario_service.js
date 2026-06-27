@@ -1,5 +1,6 @@
 const usuarioRepository = require('../repository/usuario_repository_bd')
 const tokenService = require('./token_service')
+const bcrypt = require('bcrypt')
 
 async function listar() {
     return await usuarioRepository.listar();
@@ -7,6 +8,7 @@ async function listar() {
 
 async function inserir(usuario) {
     if(usuario && usuario.email && usuario.senha){
+        usuario.senha = await bcrypt.hash(usuario.senha, 10);
         return await usuarioRepository.inserir(usuario);
     }
     else {
@@ -41,7 +43,7 @@ async function verificarLogin(usuario) {
 
     let usuarioCadastrado = await usuarioRepository.buscarPorEmail(usuario.email);
     if(usuarioCadastrado) {
-        if(usuario.senha === usuarioCadastrado.senha) {
+        if(await bcrypt.compare(usuario.senha, usuarioCadastrado.senha)) {
             const token = tokenService.criarToken({
                 id: usuarioCadastrado.id,
                 email: usuarioCadastrado.email
